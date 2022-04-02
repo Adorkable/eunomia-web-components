@@ -1,5 +1,5 @@
 {
-  "name": "eunomia-web-components",
+  "name": "@adorkable/eunomia-web-components",
   "version": "0.1.1",
   "description": "The team's go-to utilities for Web Components, named for the Greek goddess of green pastures, law and legislation",
   "main": "dist/cjs/index.js",
@@ -7,7 +7,7 @@
   "umdmodule": "dist/umd/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "npm run build & npm run test",
+    "prepare": "npm run build",
     "build": "rollup -c",
     "build:watch": "rollup -c -w"
   },
