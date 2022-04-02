@@ -1,27 +1,30 @@
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms))
+import { sleep } from '../Utility'
 
-class AnimatedField extends HTMLElement {
+export class AnimatedField extends HTMLElement {
+  updateId: number | null
+  field: HTMLDivElement
+
   constructor() {
     super()
 
+    this.updateId = null
+    this.field = document.createElement('div')
+  }
+
+  connectedCallback() {
     if (!this.getAttribute('words')) {
       this.setAttribute('words', '[]')
     }
 
-    this.updateId = null
+    const shadowRoot = this.attachShadow({ mode: 'open' })
 
-    this.attachShadow({ mode: 'open' })
-
-    this.field = document.createElement('div')
     this.field.setAttribute(
       'class',
       [this.getAttribute('class'), 'field'].join(' ')
     )
 
-    this.shadowRoot.appendChild(this.field)
-  }
+    shadowRoot.appendChild(this.field)
 
-  connectedCallback() {
     if (this.autostart) {
       this.startAnimating()
     }
@@ -38,10 +41,13 @@ class AnimatedField extends HTMLElement {
 
   get words() {
     let resultString = this.getAttribute('words')
+    if (!resultString) {
+      return []
+    }
     return JSON.parse(resultString)
   }
 
-  set words(newValue) {
+  set words(newValue: string[]) {
     if (!Array.isArray(newValue)) {
       throw new Error('words must be an array')
     }
@@ -57,11 +63,11 @@ class AnimatedField extends HTMLElement {
     return value || false
   }
 
-  set random(newValue) {
+  set random(newValue: boolean) {
     if (typeof newValue !== 'boolean') {
       throw new Error('random must be a boolean')
     }
-    this.setAttribute('random', newValue)
+    this.setAttribute('random', JSON.stringify(newValue))
   }
 
   async startAnimating(
@@ -90,7 +96,11 @@ class AnimatedField extends HTMLElement {
   // element.removeClass('hide')
   // }
 
-  static async typeUpdater(element, values, index) {
+  static async typeUpdater(
+    element: HTMLElement,
+    values: Array<any>,
+    index: number
+  ) {
     const typeDelay = 50 // TODO: custom type speed
     while (element.innerHTML.length > 0) {
       element.innerHTML = element.innerHTML.slice(0, -1)
@@ -107,7 +117,7 @@ class AnimatedField extends HTMLElement {
     }
   }
 
-  static wrappingIncrement(index, arrayForLength) {
+  static wrappingIncrement(index: number, arrayForLength: Array<any>) {
     return (index + 1) % arrayForLength.length
   }
 
@@ -124,9 +134,9 @@ class AnimatedField extends HTMLElement {
   // }
 
   async startUpdater(
-    updateFrequencyMilliseconds,
+    updateFrequencyMilliseconds: number,
     updater = AnimatedField.typeUpdater
-  ) {
+  ): Promise<number> {
     let index = 0
 
     const perform = async () => {
@@ -139,7 +149,7 @@ class AnimatedField extends HTMLElement {
     let finished = true
 
     // TODO: option for delay to start when previous finished
-    return setInterval(async () => {
+    return window.setInterval(async () => {
       if (!finished) {
         return
       }

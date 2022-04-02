@@ -1,4 +1,9 @@
-class RandomShapes extends HTMLElement {
+export class RandomShapes extends HTMLElement {
+  colors: string[]
+  shapesTotal: number
+  shapes: HTMLDivElement[]
+  shapesContainer: HTMLDivElement | undefined
+
   constructor() {
     super()
 
@@ -11,14 +16,15 @@ class RandomShapes extends HTMLElement {
   }
 
   connectedCallback() {
-    const prepareColors = this.getAttribute('colors')
-      ? this.getAttribute('colors').replaceAll("'", '"')
-      : null
+    const colors = this.getAttribute('colors')
+    const prepareColors = colors ? colors.replace(/'/g, '"') : '[]'
     const colorsAttributes = JSON.parse(prepareColors)
-    this.colors = Array.isArray(colorsAttributes)
-      ? colorsAttributes
-      : this.colors
-    this.shapesTotal = this.getAttribute('shapes-total') || this.shapesTotal
+    this.colors =
+      Array.isArray(colorsAttributes) && colorsAttributes.length > 0
+        ? colorsAttributes
+        : this.colors
+    const shapesTotal = this.getAttribute('shapes-total')
+    this.shapesTotal = shapesTotal ? parseInt(shapesTotal) : this.shapesTotal
 
     if (this.shapesContainer === undefined) {
       this.shapesContainer = document.createElement('div')
@@ -31,7 +37,7 @@ class RandomShapes extends HTMLElement {
 
         shape.classList.add('shape')
         shape.style.position = 'absolute'
-        shape.style.opacity = Math.random() * 0.8
+        shape.style.opacity = `${Math.random() * 0.8}`
         shape.style.borderRadius = `${Math.random() * 100}%`
         shape.style.background =
           this.colors[Math.floor(Math.random() * this.colors.length)]
@@ -40,7 +46,7 @@ class RandomShapes extends HTMLElement {
         shape.style.transform = `scale(${Math.random()})`
         shape.style.width = `${size}em`
         shape.style.height = shape.style.width
-        shape.style.zIndex = Math.floor(size * 100)
+        shape.style.zIndex = `${Math.floor(size * 100)}`
 
         this.animateShape(shape, this.shapes.length, size)
 
@@ -50,7 +56,7 @@ class RandomShapes extends HTMLElement {
     }
   }
 
-  animateShape(shape, index, size) {
+  animateShape(shape: HTMLElement, index: number, size: number) {
     let additionFrameChance = 0.5
     const keyFrames = ['translate(0, 0)']
     while (keyFrames.length < 2 || Math.random() < additionFrameChance) {
@@ -64,7 +70,7 @@ class RandomShapes extends HTMLElement {
     let anim = shape.animate(
       keyFrames.map((translate) => {
         return {
-          transform: translate,
+          transform: translate
         }
       }),
       {
@@ -72,7 +78,7 @@ class RandomShapes extends HTMLElement {
         direction: Math.random() > 0.5 ? 'alternate' : 'alternate-reverse',
         fill: 'both',
         iterations: Infinity,
-        easing: 'ease-in-out',
+        easing: 'ease-in-out'
       }
     )
   }

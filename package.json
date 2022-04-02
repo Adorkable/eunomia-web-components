@@ -1,0 +1,45 @@
+{
+  "name": "eunomia-web-components",
+  "version": "0.1.1",
+  "description": "The team's go-to utilities for Web Components, named for the Greek goddess of green pastures, law and legislation",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "umdmodule": "dist/umd/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build & npm run test",
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adorkable/eunomia-web-components.git"
+  },
+  "keywords": [
+    "typescript",
+    "library",
+    "web-components"
+  ],
+  "author": "Ian Grossberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Adorkable/eunomia-web-components/issues"
+  },
+  "homepage": "https://github.com/Adorkable/eunomia-web-components#readme",
+  "dependencies": {
+    "@adorkable/eunomia-typescript": "^0.3.10"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.3",
+    "@rollup/plugin-typescript": "^8.3.1",
+    "rollup": "^2.70.1",
+    "rollup-plugin-dts": "^4.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "prettier": "^2.6.1",
+    "typescript": "^4.6.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
+}
