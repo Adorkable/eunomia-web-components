@@ -15,6 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v3
+      
+      - name: Configure Adorkable Register
+        run: npm config set @adorkable:registry https://npm.pkg.github.com/
+        
+      - name: Configure Github Package Repository Credentials
+        run: npm config set //npm.pkg.github.com/:_authToken ${{ secrets.GH_PACKAGE_REPOSITORY_TOKEN }}
 
       - name: Prepare
         run: npm install
